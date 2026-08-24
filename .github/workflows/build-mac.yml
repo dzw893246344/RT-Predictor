@@ -1,0 +1,46 @@
+name: Build macOS App
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-13
+            arch: Intel
+          - os: macos-14
+            arch: AppleSilicon
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy pandas torch
+          pip install dgl -f https://data.dgl.ai/wheels/repo.html
+          pip install deepchem rdkit pyinstaller
+
+      - name: Build app bundle
+        run: |
+          pyinstaller --noconfirm --clean --distpath RT_Predictor_mac --workpath build_rt_mac RT_Predictor_mac.spec
+          codesign --force --deep --sign - RT_Predictor_mac/RT_Predictor.app
+
+      - name: Package zip
+        run: |
+          cd RT_Predictor_mac
+          zip -qry RT_Predictor_${{ matrix.arch }}.zip RT_Predictor.app
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RT_Predictor-macOS-${{ matrix.arch }}
+          path: RT_Predictor_mac/RT_Predictor_*.zip

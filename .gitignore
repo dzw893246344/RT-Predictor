@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+build/
+build_rt_mac/
+dist/
+output/
+RT_Predictor_mac/
+RT_predictor_app/
+.venv*/
+.ipynb_checkpoints/
+*.ipynb
+predicted_RT_results*.csv
+error_smiles.csv
+report.html
+test_note.md

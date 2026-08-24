@@ -1,0 +1,28 @@
+{
+  "model_dir": "AttentiveModel_RP_6min",
+  "n_tasks": 1,
+  "mode": "regression",
+  "num_layers": 4,
+  "num_timesteps": 2,
+  "graph_feat_size": 128,
+  "dropout": 0.3,
+  "number_atom_features": 30,
+  "number_bond_features": 11,
+  "self_loop": false,
+  "batch_size": 32,
+  "learning_rate": 0.0005,
+  "weight_decay": 0.001,
+  "optimizer": "Adam",
+  "nb_epoch": 100,
+  "parameter_notes": {
+    "num_layers": "*** 严重影响：增加到3-4层以更好地捕获复杂特征，过多会导致过拟合",
+    "graph_feat_size": "** 一般影响：增加特征维度以捕获更丰富的分子表示",
+    "dropout": "*** 严重影响：适度的dropout防止过拟合，过多会导致欠拟合",
+    "batch_size": "** 一般影响：适中的批次大小，默认16",
+    "learning_rate": "** 一般影响：较小的学习率确保稳定训练，默认0.001",
+    "weight_decay": "权重衰减：值越小→允许模型尽量记住训练集；值越大→更关注泛化能力",
+    "number_atom_features": "* 默认原子特征数",
+    "number_bond_features": "* 默认键特征数",
+    "self_loop": "图结构：是否保持自环以保留孤立原子信息"
+  }
+}
