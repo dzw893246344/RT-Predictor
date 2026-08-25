@@ -301,7 +301,7 @@ def process_data(
         return '是' if 1.0 <= rt <= 5.0 else '否'
 
     result_df['是否可定制'] = [is_customizable(x) for x in result_df[output_column]]
-    # del result_df[output_column]
+    del result_df[output_column]
     # 统计成功率
     success_count = total_compounds - len(error_records)
     print("-" * 50)
