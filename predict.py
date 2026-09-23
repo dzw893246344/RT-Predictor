@@ -110,6 +110,16 @@ def load_model(model_dir):
     return model, model_info
 
 
+def read_csv_robust(path, **kwargs):
+    """尝试多种编码读取CSV，兼容Excel导出（可能为GBK/带BOM）"""
+    for enc in ("utf-8-sig", "gbk", "utf-8"):
+        try:
+            return pd.read_csv(path, encoding=enc, **kwargs)
+        except (UnicodeDecodeError, UnicodeError):
+            continue
+    return pd.read_csv(path, encoding="utf-8", **kwargs)
+
+
 def load_data(input_file, smiles_column):
     """
     加载数据并处理缺失的SMILES
@@ -122,7 +132,7 @@ def load_data(input_file, smiles_column):
         清理后的DataFrame
     """
     print(f"读取输入文件: {input_file}")
-    df = pd.read_csv(input_file)
+    df = read_csv_robust(input_file)
 
     # 记录原始数据条数
     original_count = len(df)
@@ -325,13 +335,13 @@ def save_results(result_df, error_df, output_file, error_file):
         output_file: 输出文件路径
         error_file: 错误记录文件路径
     """
-    # 保存结果
-    result_df.to_csv(output_file, index=False)
+    # 保存结果（utf-8-sig 带 BOM，保证 Excel/Office 打开不乱码）
+    result_df.to_csv(output_file, index=False, encoding="utf-8-sig")
     print(f"结果已保存到 {output_file}")
 
     # 如果有错误，保存错误记录
     if error_df is not None and not error_df.empty:
-        error_df.to_csv(error_file, index=False)
+        error_df.to_csv(error_file, index=False, encoding="utf-8-sig")
         print(f"处理失败: {len(error_df)} SMILES，详情已保存到 {error_file}")
 
 

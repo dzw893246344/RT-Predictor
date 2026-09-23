@@ -125,10 +125,15 @@ class PredictGUI:
 
     def check_csv_column(self, path):
         try:
-            df = pd.read_csv(path, nrows=0)
-            return 'IsomericSMILES' in df.columns
+            for enc in ("utf-8-sig", "gbk", "utf-8"):
+                try:
+                    df = pd.read_csv(path, nrows=0, encoding=enc)
+                    return 'IsomericSMILES' in df.columns
+                except (UnicodeDecodeError, UnicodeError):
+                    continue
         except Exception:
             return False
+        return False
 
     def get_output_filename(self):
         input_path = self.input_file.get()
