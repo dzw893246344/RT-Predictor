@@ -31,14 +31,13 @@ jobs:
       - name: Build app bundle
         run: |
           pyinstaller --noconfirm --clean --distpath RT_Predictor_mac --workpath build_rt_mac RT_Predictor_mac.spec
-          codesign --force --deep --sign - RT_Predictor_mac/RT_Predictor_v3.app
 
       - name: Package zip
         run: |
           cd RT_Predictor_mac
-          zip -qry RT_Predictor_v3_${{ matrix.arch }}.zip RT_Predictor_v3.app
+          zip -qry RT_Predictor_v3_nosign_${{ matrix.arch }}.zip RT_Predictor_v3.app
 
       - uses: actions/upload-artifact@v4
         with:
-          name: RT_Predictor-v3-${{ matrix.arch }}
-          path: RT_Predictor_mac/RT_Predictor_v3_*.zip
+          name: RT_Predictor-v3-nosign-${{ matrix.arch }}
+          path: RT_Predictor_mac/RT_Predictor_v3_nosign_*.zip
