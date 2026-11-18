@@ -1,4 +1,6 @@
 ﻿# -*- mode: python ; coding: utf-8 -*-
+import glob
+import os
 from PyInstaller.utils.hooks import collect_all
 
 datas = []
@@ -18,6 +20,16 @@ tmp_ret = collect_all('deepchem')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 tmp_ret = collect_all('rdkit')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
+
+try:
+    import dgl
+    dgl_dir = os.path.dirname(dgl.__file__)
+    for pattern in ('graphbolt/libgraphbolt*.dylib', 'graphbolt/libgraphbolt*.so'):
+        for lib in glob.glob(os.path.join(dgl_dir, pattern)):
+            if not any(os.path.basename(b[0]) == os.path.basename(lib) for b in binaries):
+                binaries.append((lib, 'dgl/graphbolt'))
+except Exception as exc:
+    print(f'WARNING: could not collect graphbolt library: {exc}')
 
 
 a = Analysis(
