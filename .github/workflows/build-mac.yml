@@ -27,6 +27,7 @@ jobs:
           pip install numpy==1.26.4 pandas
           pip install torch==2.3.0
           pip install dgl -f https://data.dgl.ai/wheels/repo.html
+          pip install torchdata==0.7.1
           python -c "import dgl; print('dgl import OK:', dgl.__version__)"
           pip install deepchem rdkit pyinstaller
 
