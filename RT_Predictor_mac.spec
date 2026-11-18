@@ -52,7 +52,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='RT_Predictor_v3',
+    name='RT_Predictor_v3.1',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -72,12 +72,12 @@ coll = COLLECT(
     strip=False,
     upx=False,
     upx_exclude=[],
-    name='RT_Predictor_v3',
+    name='RT_Predictor_v3.1',
 )
 
 app = BUNDLE(
     coll,
-    name='RT_Predictor_v3.app',
+    name='RT_Predictor_v3.1.app',
     info_plist={
         'CFBundleName': 'RT_Predictor',
         'CFBundleDisplayName': 'RT Predictor',
